@@ -5,7 +5,7 @@ import duckdb
 import pandas as pd
 
 
-def create_database():
+def create_insert_database():
     baseUrl = "https://pokeapi.co/api/v2/"
 
     
@@ -21,8 +21,6 @@ def create_database():
             data = response.json()
             resultData = data['results'] 
             df = pd.DataFrame(resultData) 
-            
-            
             
             dfData = []
 
@@ -52,4 +50,4 @@ def create_database():
         print(table[0])
     conn.close()
 
-create_database()
+create_insert_database()

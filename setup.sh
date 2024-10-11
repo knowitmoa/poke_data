@@ -4,7 +4,11 @@
 CURRENT_DIR=$(pwd)
 PYTHON_FILE="$CURRENT_DIR/data/fetch_data.py" # Replace with your actual Python file name
 DATA_BASE_TOOL="$CURRENT_DIR/poke_data_dbt"
+
+QUERY_FILE="$CURRENT_DIR/data/queries.py"
 VENV_DIR=".venv"
+
+
 
 echo $PYTHON_FILE
 # Check if the virtual environment directory exists
@@ -40,14 +44,24 @@ else
 fi
 
 if [ -d "$DATA_BASE_TOOL" ]; then
-    cd "$DATA_BASE_TOOL" || exit 1  # Change to the directory; exit if it fails
+    cd "$DATA_BASE_TOOL" || exit 1  
     echo "Running dbt run in the directory: $DATA_BASE_TOOL..."
-    dbt run  # Execute the dbt command
+    dbt run
+    dbt docs generate  
+    dbt docs serve
 else
     echo "Directory $DATA_BASE_TOOL not found!"
     exit 1
 fi
 
+
+if [ -f "$QUERY_FILE" ]; then
+    echo "Running dbt run in the file: $QUERY_FILE..."
+    python3 "$QUERY_FILE"
+else
+    echo "File $QUERY_FILE not found!"
+    exit 1
+fi
 # # Deactivate the virtual environment
 echo "Deactivating the virtual environment..."
 deactivate
@@ -56,7 +70,7 @@ echo "Script completed successfully."
 
 
 
-CRON_JOB="* 1 * * * /bin/bash $CURRENT_DIR/setup.sh >> $CURRENT_DIR/logfile.log 2>&1"
+CRON_JOB="* * * 1 * /bin/bash $CURRENT_DIR/setup.sh >> $CURRENT_DIR/logfile.log 2>&1"
 
 # Check if the cron job already exists
 if ! crontab -l | grep -qF "$CRON_JOB"; then
