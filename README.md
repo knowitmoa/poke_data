@@ -23,4 +23,12 @@
 
    ```bash
    bash setup.sh
+
+   follow the link in the terminal to view the tables and linear graph
+
+
    ```
+
+
+4. Navigate to poke_data/data and run the insights.ipynb by the "Run all"-button
+
